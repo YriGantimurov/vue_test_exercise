@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-import EmployForm from './EmployForm.vue'
+import EmployForm from './Form/EmployForm.vue'
 </script>
