@@ -1,7 +1,7 @@
 <template>
-  <Form />
+  <EmployForm />
 </template>
 
 <script setup lang="ts">
-import Form from './components/Form.vue'
+import EmployForm from './EmployForm.vue'
 </script>
