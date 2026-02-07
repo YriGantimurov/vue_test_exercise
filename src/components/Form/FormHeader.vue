@@ -2,7 +2,7 @@
   <div class="flex gap-3 items-center">
     <p class="text-2xl text-neutral-950 font-medium">Учётные записи</p>
     <button
-      class="border rounded-md cursor-pointer p-1"
+      class="border border-neutral-200 rounded-md cursor-pointer p-1 transition-colors hover:bg-neutral-200"
       @click="
         addRecord({
           tags: null,

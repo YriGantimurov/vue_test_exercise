@@ -14,7 +14,7 @@
     v-model="record.recordType"
     @change="validateAndUpdateRecord()"
     :name="record.id + '-type'"
-    class="text-xs border-neutral-200 rounded-md border h-full p-1.5"
+    class="text-xs border-neutral-200 rounded-md border h-full p-1.5 cursor-pointer"
   >
     <option value="LDAP" class="text-xs">LDAP</option>
     <option value="Локальная" class="text-xs">Локальная</option>
@@ -43,7 +43,7 @@
 
   <!-- Delete button -->
   <button
-    class="cursor-pointer"
+    class="cursor-pointer transition-colors hover:bg-neutral-200 p-1.5 rounded-md"
     @click="
       () => {
         removeRecord(record.id)
