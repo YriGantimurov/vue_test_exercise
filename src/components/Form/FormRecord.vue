@@ -52,7 +52,7 @@
       }
     "
   >
-    <IconHOC icon-filename="trash-bin-icon.svg" size="4" color="fill-neutral-950 " />
+    <SVGIcon icon-filename="trash-bin-icon.svg" size="4" color="fill-neutral-950 " />
   </button>
 </template>
 
@@ -63,7 +63,7 @@ interface RecordValidity {
 }
 import { ref } from 'vue'
 import { useFormStore } from '@/stores/form'
-import IconHOC from '@/components/IconHOC.vue'
+import SVGIcon from '@/components/SVGIcon.vue'
 import type { FormRecord, TagData } from '@/interfaces/form'
 import PasswordInput from './PasswordInput.vue'
 import { setFormData } from '@/utilities/formLocalStorage'

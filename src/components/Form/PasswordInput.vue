@@ -12,7 +12,7 @@
       class="text-xs p-1.5 w-full"
     />
     <button @click="isPasswordVisible = !isPasswordVisible" class="cursor-pointer">
-      <IconHOC
+      <SVGIcon
         :icon-filename="`${isPasswordVisible ? 'eye-icon.svg' : 'eye-closed-icon.svg'}`"
         size="4"
       />
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import type { RecordType } from '@/interfaces/form'
 import { ref } from 'vue'
-import IconHOC from '../IconHOC.vue'
+import SVGIcon from '../SVGIcon.vue'
 
 defineProps<{
   isPasswordValid: boolean

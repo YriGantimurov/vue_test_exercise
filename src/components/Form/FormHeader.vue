@@ -13,7 +13,7 @@
         })
       "
     >
-      <IconHOC icon-filename="user-plus-icon.svg" size="4" color="fill-neutral-950 " />
+      <SVGIcon icon-filename="user-plus-icon.svg" size="4" color="fill-neutral-950 " />
     </button>
   </div>
 </template>
@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import type { FormRecord } from '@/interfaces/form'
 import createUUID from '@/utilities/createUUID'
-import IconHOC from '../IconHOC.vue'
+import SVGIcon from '../SVGIcon.vue'
 
 defineProps<{ addRecord: (record: FormRecord) => void }>()
 </script>
