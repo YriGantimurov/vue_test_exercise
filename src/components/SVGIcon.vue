@@ -20,9 +20,11 @@ const assetsFolderPath = '/assets/icons'
 const pxSize = Number(size) * 4
 onMounted(() => {
   // Console warning if file isn't exists
-  ifImageExists(`http://localhost:5173/${assetsFolderPath}/${iconFilename}`).then((exists) => {
-    if (!exists)
-      console.warn(`File not found or not image: public${assetsFolderPath}/${iconFilename}`)
-  })
+  if (import.meta.env.DEV) {
+    ifImageExists(`http://localhost:5173/${assetsFolderPath}/${iconFilename}`).then((exists) => {
+      if (!exists)
+        console.warn(`File not found or not image: public${assetsFolderPath}/${iconFilename}`)
+    })
+  }
 })
 </script>
