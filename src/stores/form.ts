@@ -1,23 +1,18 @@
-import type { formRecord, formRecordWithId } from '@/interfaces/form'
+import type { FormRecord } from '@/interfaces/form'
 import { defineStore } from 'pinia'
 
 export const useFormStore = defineStore('form', {
   state: () => {
     return {
-      records: [
-        {
-          tags: '2',
-          recordType: 'Локальная',
-          login: '2',
-          password: null,
-          id: crypto.randomUUID(),
-        },
-      ] as formRecordWithId[],
+      records: [] as FormRecord[],
     }
   },
   actions: {
-    addRecord(record: formRecordWithId) {
+    addRecord(record: FormRecord) {
       this.records.push(record)
+    },
+    addRecords(records: FormRecord[]) {
+      records.forEach((record) => this.addRecord(record))
     },
     removeRecord(id: string) {
       this.records = this.records.filter((record) => record.id !== id)

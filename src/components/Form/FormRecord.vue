@@ -1,16 +1,18 @@
 <template>
   <!-- Tags input -->
   <textarea
-    v-model="localRecord.tags"
+    v-model="tagsInput"
     @blur="validateAndUpdateRecord()"
     rows="1"
+    :name="record.id + '-tags'"
     class="overflow-y-scroll scrollbar-hidden p-1.5 text-xs resize-none border rounded-md w-full border-neutral-200"
   ></textarea>
 
   <!-- Record type select -->
   <select
-    v-model="localRecord.recordType"
+    v-model="record.recordType"
     @change="validateAndUpdateRecord()"
+    :name="record.id + '-type'"
     class="text-xs border-neutral-200 rounded-md border h-full p-1.5"
   >
     <option value="LDAP" class="text-xs">LDAP</option>
@@ -19,19 +21,21 @@
 
   <!-- Login input -->
   <input
-    v-model="localRecord.login"
+    v-model="record.login"
     @blur="validateAndUpdateRecord()"
+    :name="record.id + '-login'"
     :class="`text-xs p-1.5 rounded-md border w-full 
-      ${localRecord.recordType === 'LDAP' && 'col-span-2'} 
+      ${record.recordType === 'LDAP' && 'col-span-2'} 
       ${recordValidity.login ? 'border-neutral-200' : 'border-red-300'}`"
   />
 
   <!-- Password input -->
   <PasswordInput
-    v-model="localRecord.password"
+    v-model="record.password"
     class="w-full"
     :is-password-valid="recordValidity.password"
-    :local-record="localRecord"
+    :record-type="record.recordType"
+    :record-id="record.id"
     :validate-and-update-record="validateAndUpdateRecord"
   />
 
@@ -40,8 +44,9 @@
     class="cursor-pointer"
     @click="
       () => {
-        removeLocalRecord(localRecord.id)
-        formStore.removeRecord(localRecord.id)
+        removeRecord(record.id)
+        formStore.removeRecord(record.id)
+        setFormData(formStore.records)
       }
     "
   >
@@ -57,36 +62,69 @@ interface RecordValidity {
 import { ref } from 'vue'
 import { useFormStore } from '@/stores/form'
 import IconHOC from '@/components/IconHOC.vue'
-import type { formRecordWithId } from '@/interfaces/form'
+import type { FormRecord, TagData } from '@/interfaces/form'
 import PasswordInput from './PasswordInput.vue'
+import { setFormData } from '@/utilities/formLocalStorage'
 
 defineProps<{
-  removeLocalRecord: (id: string) => void
+  removeRecord: (id: string) => void
 }>()
 const formStore = useFormStore()
 const recordValidity = ref<RecordValidity>({
   login: true,
   password: true,
 })
-const localRecord = defineModel<formRecordWithId>({ default: {} })
+const record = defineModel<FormRecord>({ default: {} })
+const tagsInput = ref<string | null>(null)
 
 const validateRecord = () => {
-  recordValidity.value.login = localRecord.value.login !== null && localRecord.value.login !== ''
+  // validate login
+  recordValidity.value.login = record.value.login !== null && record.value.login !== ''
+
+  // validate password
   recordValidity.value.password =
-    localRecord.value.recordType === 'LDAP' ||
-    (localRecord.value.recordType === 'Локальная' &&
-      localRecord.value.password !== null &&
-      localRecord.value.password !== '')
+    record.value.recordType === 'LDAP' ||
+    (record.value.recordType === 'Локальная' &&
+      record.value.password !== null &&
+      record.value.password !== '')
 }
 
 const validateAndUpdateRecord = () => {
   validateRecord()
-  formStore.removeRecord(localRecord.value.id)
+  formStore.removeRecord(record.value.id)
   if (recordValidity.value.password && recordValidity.value.login) {
     // Format data before saving
-    const password = localRecord.value.recordType === 'LDAP' ? null : localRecord.value.password
-    const tags = localRecord.value.tags === '' ? null : localRecord.value.tags
-    formStore.addRecord({ ...localRecord.value, tags, password })
+    const password = record.value.recordType === 'LDAP' ? null : record.value.password
+    const tags = tagsToArray(tagsInput.value)
+
+    // Save into pinia store
+    formStore.addRecord({ ...record.value, tags, password })
   }
+  // Sychronize pinia store and localStorage
+  setFormData(formStore.records)
 }
+
+const tagsToString = (tags: TagData[] | null) => {
+  if (tags === null) return null
+  const array = tags.map((tag) => tag.text)
+  return array.join('; ')
+}
+
+const tagsToArray = (tags: string | null) => {
+  if (tags === null) return null
+  const array: TagData[] = tags
+    .split(';')
+    .map((tag) => {
+      const text = tag.trim()
+      // Returns value only if text isn't empty
+      if (text !== '')
+        return {
+          text: text,
+        }
+    })
+    .filter((tag) => tag !== undefined)
+  return array
+}
+
+tagsInput.value = tagsToString(record.value.tags)
 </script>

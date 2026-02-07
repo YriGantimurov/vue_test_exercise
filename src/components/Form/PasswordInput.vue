@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="localRecord.recordType === 'Локальная'"
+    v-if="recordType === 'Локальная'"
     :class="`flex rounded-md border w-full pr-1.5
       ${isPasswordValid ? 'border-neutral-200' : 'border-red-300'}`"
   >
@@ -8,6 +8,7 @@
       v-model="passwordModel"
       @blur="validateAndUpdateRecord()"
       :type="isPasswordVisible ? 'text' : 'password'"
+      :name="recordId + '-password'"
       class="text-xs p-1.5 w-full"
     />
     <button @click="isPasswordVisible = !isPasswordVisible" class="cursor-pointer">
@@ -20,14 +21,15 @@
 </template>
 
 <script setup lang="ts">
-import type { formRecordWithId } from '@/interfaces/form'
+import type { RecordType } from '@/interfaces/form'
 import { ref } from 'vue'
 import IconHOC from '../IconHOC.vue'
 
-const { isPasswordValid, localRecord, validateAndUpdateRecord } = defineProps<{
+defineProps<{
   isPasswordValid: boolean
-  localRecord: formRecordWithId
+  recordType: RecordType
   validateAndUpdateRecord: () => void
+  recordId: string
 }>()
 const passwordModel = defineModel()
 const isPasswordVisible = ref<boolean>(false)
