@@ -3,6 +3,7 @@
   <textarea
     v-model="tagsInput"
     @blur="validateAndUpdateRecord()"
+    maxlength="50"
     rows="1"
     :name="record.id + '-tags'"
     class="overflow-y-scroll scrollbar-hidden p-1.5 text-xs resize-none border rounded-md w-full border-neutral-200"
@@ -23,6 +24,7 @@
   <input
     v-model="record.login"
     @blur="validateAndUpdateRecord()"
+    maxlength="100"
     :name="record.id + '-login'"
     :class="`text-xs p-1.5 rounded-md border w-full 
       ${record.recordType === 'LDAP' && 'col-span-2'} 
